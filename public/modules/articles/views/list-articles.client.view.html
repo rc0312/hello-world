@@ -1,20 +1,128 @@
 <section data-ng-controller="ArticlesController" data-ng-init="find()">
-	<div class="page-header">
-		<h1>Articles</h1>
+
+	<div class="row">
+		<div class="col-md-2 sidebar">
+
+			<div class="row">
+				<h3>Event Stream</h3>
+			</div>
+
+			<ul class="nav nav-sidebar">
+
+<!--OLD EVENT STREAM
+				<li ng-repeat="event in events" ng-click="updateEvent(event)">
+					<p><b>{{event.name}}</b> | {{event.owner}}</p>
+				</li>
+-->
+
+				<a data-ng-repeat="article in articles" data-ng-href="#!/articles/{{article._id}}" class="list-group-item">	
+					<h4 class="list-group-item-heading" data-ng-bind="article.title"></h4>
+					<p class="list-group-item-text" data-ng-bind="article.content"></p>					
+					<small class="list-group-item-text">
+						<span data-ng-bind="article.created | date:'mediumDate'"></span>
+						by
+						<span data-ng-bind="article.user.displayName"></span>
+					</small>
+
+				</a>					
+
+		</div>
+
+		<div class="col-md-9">
+
+			<div class="row">
+				<h3></h3>
+			</div>			
+
+			<div class="row">
+
+				<div class="col-md-12">
+					<button class="btn btn-default" ng-click="createEvent()">Create New Event</button>
+				</div>
+
+				<div class="col-md-12" ng-show="eventDisplay.creatingEvent">
+
+<!--OLD NEW EVENT INPUT SECTION					
+					<p>Event Name: </p><input type="text" ng-model="newEvent">
+					<p>Event Owner: </p><input type="text" ng-model="newOwner">
+					<button class="btn btn-default" ng-click="addEvent()">Save Event</button>
+-->
+
+<!--CREATE EVENT BLOCK-->
+					<div class="col-md-12">
+						<form name="articleForm" class="form-horizontal" data-ng-submit="create()" novalidate>
+							<fieldset>
+								<div class="form-group" ng-class="{ 'has-error': articleForm.title.$dirty && articleForm.title.$invalid }">
+									<label class="control-label" for="title">Title</label>
+									<div class="controls">
+										<input name="title" type="text" data-ng-model="title" id="title" class="form-control" placeholder="Title" required>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label" for="content">Description</label>
+									<div class="controls">
+										<textarea name="content" data-ng-model="content" id="content" class="form-control" cols="30" rows="1" placeholder="Description"></textarea>
+									</div>
+								</div>
+								<div class="form-group">
+									<input type="submit" class="btn btn-default">
+								</div>
+								<div data-ng-show="error" class="text-danger">
+									<strong data-ng-bind="error"></strong>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+<!--END CREATE EVENT BLOCK-->
+
+
+				</div>
+
+			</div>
+
+<!--OLD DISPLAY CLICKED EVENT
+       		<p>Name: {{eventDisplay.name}}</p>
+       		<p>Owner: {{eventDisplay.owner}}</p>
+-->
+
+			<div class="row">
+				<h3>Your Events</h3>
+			</div>
+
+			<div class="list-group">
+					<a data-ng-repeat="article in articles" data-ng-href="#!/articles/{{article._id}}" class="list-group-item">
+
+<!--EDIT + DELETE BUTTONS						
+						<div class="pull-right" data-ng-show="authentication.user._id == article.user._id">
+							<a class="btn btn-primary" href="/#!/articles/{{article._id}}/edit">
+								<i class="glyphicon glyphicon-edit"></i>
+							</a>
+							<a class="btn btn-primary" data-ng-click="remove();">
+								<i class="glyphicon glyphicon-trash"></i>
+							</a>
+						</div>
+-->
+
+						<small class="list-group-item-text">
+							Created on
+							<span data-ng-bind="article.created | date:'mediumDate'"></span>
+							by
+							<span data-ng-bind="article.user.displayName"></span>
+						</small>
+						<h4 class="list-group-item-heading" data-ng-bind="article.title"></h4>
+						<p class="list-group-item-text" data-ng-bind="article.content"></p>
+
+					</a>
+			</div>
+			<div class="alert alert-warning text-center" data-ng-if="articles.$resolved && !articles.length">
+				No events yet, why don't you <a href="/#!/articles/create">create one</a>?
+			</div>
+
+
+		</div>
 	</div>
-	<div class="list-group">
-		<a data-ng-repeat="article in articles" data-ng-href="#!/articles/{{article._id}}" class="list-group-item">
-			<small class="list-group-item-text">
-				Posted on
-				<span data-ng-bind="article.created | date:'mediumDate'"></span>
-				by
-				<span data-ng-bind="article.user.displayName"></span>
-			</small>
-			<h4 class="list-group-item-heading" data-ng-bind="article.title"></h4>
-			<p class="list-group-item-text" data-ng-bind="article.content"></p>
-		</a>
-	</div>
-	<div class="alert alert-warning text-center" data-ng-if="articles.$resolved && !articles.length">
-		No articles yet, why don't you <a href="/#!/articles/create">create one</a>?
-	</div>
+
+
+
+	
 </section>
